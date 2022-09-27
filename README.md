@@ -1,3 +1,3 @@
 # LeetCode
 
-For some hard but fun/interesting LeetCode Questions.
+For all LeetCode questions - so I can track progress
