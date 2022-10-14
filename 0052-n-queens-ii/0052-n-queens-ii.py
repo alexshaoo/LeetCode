@@ -1,32 +1,10 @@
 class Solution:
   def totalNQueens(self, n: int) -> int:
-    col = set()
-    pos = set()
-    neg = set()
+    def backtrack(queens=[], d1=[], d2=[]):
+      l = len(queens)
+      c = 0
+      if l == n:
+        c += 1
+      return c + sum([backtrack(queens+[j], d1+[j-l], d2+[j+l]) for j in range(n) if j not in queens and j-l not in d1 and j+l not in d2])
     
-    ans = []
-    board = [['.']*n for _ in range(n)]
-    
-    def backtrack(r):
-      if r == n:
-        ans.append(["".join(row) for row in board])
-        return
-      
-      for c in range(n):
-        if c not in col and r+c not in pos and r-c not in neg:
-          
-          board[r][c] = "Q"
-          col.add(c)
-          pos.add(r+c)
-          neg.add(r-c)
-          
-          backtrack(r+1)
-          
-          board[r][c] = '.'
-          col.remove(c)
-          pos.remove(r+c)
-          neg.remove(r-c)
-          
-    backtrack(0)
-    
-    return len(ans)
+    return backtrack()
