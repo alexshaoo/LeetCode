@@ -1,16 +1,19 @@
 class Solution {
 public:
   bool equalFrequency(string word) {
-    const int l = word.size();
-    for (int i = 0; i < l; i++) {
-      map<char, int> freq;
-      for (int j = 0; j < l; j++) {
-        if (j == i) continue;
-        else freq[word[j]]++;
+    int l = 0;
+    int n = word.length();
+    map<char, int> freq;
+    for (const auto &i : word) freq[i]++;
+    if (freq.size() == n) return 1;
+    while (l <= n) {
+      int c = 0;
+      for(const auto &i : freq) {
+        if (i.second < l) c += i.second;
+        else c += (i.second-l);
       }
-      set<int> s;
-      for (const auto& thing : freq) s.insert(thing.second);
-      if (s.size() == 1) return true;
+      if (c == 1) return true;
+      l++;
     }
     return false;
   }
