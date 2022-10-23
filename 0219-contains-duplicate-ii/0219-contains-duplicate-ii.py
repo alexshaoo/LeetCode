@@ -3,6 +3,6 @@ class Solution:
     d = {}
     for i, num in enumerate(nums):
       if num in d and abs(d[num] - i) <= k:
-        return True
+        return 1
       d[num] = i
-    return False
+    return 0
