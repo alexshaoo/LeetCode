@@ -17,7 +17,7 @@ public:
         bitset curr = dp[i];
         if ((curr & next).any()) continue;
         dp.push_back(curr | next);
-        res = max(res, (int)(curr.count()) + n);
+        res = max(res, n + (int)curr.count());
       }
     }
     
