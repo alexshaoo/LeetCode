@@ -11,11 +11,11 @@ public:
         if (img2[i][j] == 1) b.push_back(coord);
       }
     }
-    map<pair<int, int>, int> mp;
+    unordered_map<int, int> mp;
     for (const auto& aa : a) {
       for (const auto& bb : b) {
-        mp[{aa.first-bb.first,aa.second-bb.second}] += 1;
-        ans = max(ans, mp[{aa.first-bb.first,aa.second-bb.second}]);
+        mp[100*(aa.first-bb.first)+aa.second-bb.second] += 1;
+        ans = max(ans, mp[100*(aa.first-bb.first)+aa.second-bb.second]);
       }
     }
     return ans;
