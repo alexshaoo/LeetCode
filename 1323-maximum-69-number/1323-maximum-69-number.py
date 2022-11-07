@@ -1,10 +1,12 @@
 class Solution:
   def maximum69Number(self, num: int) -> int:
-    s = str(num)
-    l = len(s)
-    ind = s.find("6")
-    if ind == -1:
+    c, u, m = -1, 0, num
+    while m:
+      if m % 10 == 6:
+        c = u
+      m //= 10
+      u += 1
+    if c == -1:
       return num
-    else:
-      return num + 3*(10**(l-ind-1))
+    return num + 3*10**c
     
