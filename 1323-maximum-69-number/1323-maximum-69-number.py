@@ -1,9 +1,10 @@
 class Solution:
   def maximum69Number(self, num: int) -> int:
-    num = list(str(num))
-    for i, digit in enumerate(num):
-      if digit == "6":
-        num[i] = "9"
-        break
-    return int("".join(num))
+    s = str(num)
+    l = len(s)
+    ind = s.find("6")
+    if ind == -1:
+      return num
+    else:
+      return num + 3*(10**(l-ind-1))
     
