@@ -6,8 +6,7 @@ class StockSpanner:
   def next(self, price: int) -> int:
     n = 1
     while self.s and price >= self.s[-1][0]:
-      n += self.s[-1][1]
-      self.s.pop()
+      n += self.s.pop()[1]
     self.s.append([price, n])
     return n
 
