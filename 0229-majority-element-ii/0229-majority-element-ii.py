@@ -15,6 +15,5 @@ class Solution:
       else:
         c1 -= 1
         c2 -= 1
-    print(c1, c2, n1, n2)
     return [n for n in [n1, n2] if nums.count(n) > len(nums) // 3]
   
