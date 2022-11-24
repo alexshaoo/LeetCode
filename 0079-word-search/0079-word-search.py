@@ -1,28 +1,21 @@
 class Solution:
     def exist(self, board: List[List[str]], word: str) -> bool:
-
-        def count(i,j,ind,seen):
-            if (i,j) in seen or i<0 or j<0 or i>=len(board) or j>=len(board[0]) or board[i][j]!=word[ind]:
-                return False
-
-            if ind==len(word)-1:
-                return True
-
-            seen.add((i,j))
-            l = count(i-1,j,ind+1,seen)
-            r = count(i,j+1,ind+1,seen)
-            u = count(i,j-1,ind+1,seen)
-            b = count(i+1,j,ind+1,seen)
-            seen.discard((i,j))
-
-            return l or u or r or b
-
-
-        m,n = len(board),len(board[0])
-        for i in range(m):
-            for j in range(n):
-                if board[i][j]==word[0]:
-                    seen = set()
-                    if count(i,j,0,seen):
-                        return True
-        return False
+        l, rows, cols = len(word), len(board), len(board[0])
+        
+        def dfs(x, y, d): # d is the depth of recursion
+            
+            if d == l: return True
+            else:
+                if 0 <= x < cols and 0 <= y < rows and board[y][x] == word[d]:
+                    board[y][x], tmp = "", board[y][x]
+                    for dx, dy in ((-1, 0), (1, 0), (0, 1), (0,-1)):
+                        if dfs(x + dx, y + dy, d + 1): return True
+                    board[y][x] = tmp
+        counter, starts = Counter(word), []
+        for row in range(rows):
+            for col in range(cols):
+                counter[board[row][col]] -= 1
+                if board[row][col] == word[0]: starts.append((row, col))
+        if max(counter.values()) > 0: return False
+        for row, col in starts:
+            if dfs(col, row, 0): return True
