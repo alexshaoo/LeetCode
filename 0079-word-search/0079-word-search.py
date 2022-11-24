@@ -1,17 +1,34 @@
-class Solution:
+class Solution(object):
     def exist(self, board, word):
-        if not board: return False
-        if not word: return True
-        for i in range(len(board)):
-            for j in range(len(board[0])):
-                if self.dfs(board, word, i, j):
-                    return True
-        return False
-
-    def dfs(self, board, word, i, j):
-        if word[0] == board[i][j]:
-            board[i][j] = '#'
-            if len(word) == 1 or (i > 0 and self.dfs(board, word[1:], i-1, j)) or (i < len(board)-1 and self.dfs(board, word[1:], i+1, j)) or (j > 0 and self.dfs(board, word[1:], i, j-1)) or (j < len(board[0])-1 and self.dfs(board, word[1:], i, j+1)):
+        """
+        :type board: List[List[str]]
+        :type word: str
+        :rtype: bool
+        """
+        
+        height = len(board)
+        width = len(board[0])
+        
+        def go(i, j, depth):
+            if depth >= len(word):
                 return True
-            board[i][j] = word[0]
-        return False
+
+            if i < 0 or i >= height or j < 0 or j >= width:
+                return False
+            
+            if board[i][j] == word[depth]:
+                board[i][j] = '-'
+                found =  go(i - 1, j, depth + 1) or \
+                         go(i + 1, j, depth + 1) or \
+                         go(i, j - 1, depth + 1) or \
+                         go(i, j + 1, depth + 1)
+                board[i][j] = word[depth]
+                if found:
+                    return True
+            
+            if depth == 0:
+                return go(i, j + 1, depth) if j + 1 < width else go(i + 1, 0, depth)
+            
+            return False
+        
+        return go(0, 0, 0)
