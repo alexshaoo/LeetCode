@@ -1,29 +1,36 @@
 class Solution:
-  def exist(self, board: List[List[str]], word: str) -> bool:
-    l, rows, cols = len(word), len(board), len(board[0])
-    def dfs(x, y, d):
-      if d == l: 
-        return True
-      else:
-        if 0 <= x < cols and 0 <= y < rows:
-          let = board[y][x]
-          if let == word[d]:
-            board[y][x] = ""
-            for dx, dy in ((0,1),(0,-1),(1,0),(-1,0)):
-              if dfs(x+dx, y+dy, d+1): 
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        def bt(r, c, word_idx):
+            if word_idx == len(word):
                 return True
-            board[y][x] = let
-          
-    counter = Counter(word)
-    coords = []
-    for r in range(rows):
-      for c in range(cols):
-        let = board[r][c]
-        counter[let] -= 1
-        if let == word[0]: 
-          coords.append((r, c))
-    if max(counter.values()) > 0: 
-      return False
-    for r, c in coords:
-      if dfs(c, r, 0): 
-        return True
+            
+            if not (0 <= r < len(board) and 0 <= c < len(board[0]) and board[r][c] == word[word_idx]):
+                return False
+            
+            board[r][c], initial_char = None, board[r][c]
+            
+            for (r2, c2) in ((r + 1, c), (r - 1, c), (r, c + 1), (r, c - 1)):
+                if bt(r2, c2, word_idx + 1):
+                    return True
+            
+            board[r][c] = initial_char
+        
+        word_counter = Counter(word)
+        board_counter = Counter(sum(board, []))
+        
+        for char, word_char_count in word_counter.items():
+            if board_counter[char] < word_char_count:
+                return False
+        
+        # if the last letter from the word is a less common char on the board than the first letter
+        # then we can reverse the word that we're searching for to reduce the search space
+        # (because there will be fewer valid starting positions)
+        if word_counter[word[-1]] < word_counter[word[0]]:
+            word = word[::-1]
+        
+        for row_idx in range(len(board)):
+            for col_idx in range(len(board[0])):
+                if bt(row_idx, col_idx, 0):
+                    return True
+        
+        return False
