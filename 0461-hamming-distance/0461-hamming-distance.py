@@ -1,3 +1,8 @@
 class Solution:
   def hammingDistance(self, x: int, y: int) -> int:
-    return bin(x ^ y)[2:].count('1')
+    c = 0
+    for l in bin(x ^ y)[2:]:
+      if l == '1':
+        c += 1
+    return c
+      
