@@ -1,7 +1,7 @@
 class Solution:
   def numRescueBoats(self, people: List[int], limit: int) -> int:
     l = len(people)
-    people = sorted(people)
+    people.sort()
     l, r, b = 0, l-1, 0
     while l <= r:
       if people[l] + people[r] <= limit:
