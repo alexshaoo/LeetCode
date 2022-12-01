@@ -8,10 +8,8 @@ public:
     while (l <= r) {
       if (people[l] + people[r] <= limit) {
         ++l;
-        --r;
-      } else {
-        --r;
       }
+      --r;
       ++b;
     }
     return b;
