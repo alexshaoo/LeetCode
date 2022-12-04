@@ -1,18 +1,26 @@
 class Solution:
-  def minimumAverageDifference(self, nums: List[int]) -> int:
-    l = len(nums)
-    ps = [0]
-    for num in nums:
-      ps.append(num + ps[-1])
-    mi, m = -1, float('inf')
-    for i in range(1, l):
-      # print(ps[i], ps[l]-ps[i], i, l-i)
-      d = abs(ps[i]//i-(ps[l]-ps[i])//(l-i))
-      if d < m:
-        mi = i-1
-        m = d
-      # print(d)
-      i += 1
-    if ps[-1]//l < m:
-      return l-1
-    return mi
+    def minimumAverageDifference(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n == 1:
+            return 0
+        
+        min_avg_diff = math.inf
+        index = -1
+        
+        one, two = 0, sum(nums)
+        
+        for i in range(n):
+            one = one + nums[i]
+            two = two - nums[i]
+            one_avg = one//(i+1)
+            
+            if i == n-1:
+                two_avg = 0
+            else:
+                two_avg = two//(n-i-1)
+                
+            avg_diff = abs(one_avg-two_avg)
+            if avg_diff < min_avg_diff:
+                min_avg_diff = avg_diff
+                index = i
+        return index
