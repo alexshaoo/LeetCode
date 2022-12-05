@@ -10,7 +10,15 @@
  */
 class Solution {
 public:
-  ListNode* middleNode(ListNode* fast, ListNode* slow=0) {
-    return slow ? !fast || !fast->next ? slow : middleNode(fast->next->next, slow->next) : middleNode(fast, fast);
+  ListNode* middleNode(ListNode* head) {
+    ListNode* slow = head;
+    ListNode* fast = head;
+
+    while (fast && fast->next) {
+      fast = fast->next->next;
+      slow = slow->next;
+    }
+
+    return slow;
   }
 };
