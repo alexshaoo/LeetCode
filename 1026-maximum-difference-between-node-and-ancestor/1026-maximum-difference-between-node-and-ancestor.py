@@ -5,11 +5,9 @@
 #         self.left = left
 #         self.right = right
 class Solution:
-  def helper(self, root, mi, ma):
+  def maxAncestorDiff(self, root: Optional[TreeNode], mi=int(1e5), ma=0) -> int:
     if not root:
       return ma-mi
     mi = min(mi, root.val)
     ma = max(ma, root.val)
-    return max(self.helper(root.left, mi, ma), self.helper(root.right, mi, ma))
-  def maxAncestorDiff(self, root: Optional[TreeNode]) -> int:
-    return self.helper(root, int(1e5), 0)
+    return max(self.maxAncestorDiff(root.left, mi, ma), self.maxAncestorDiff(root.right, mi, ma))
