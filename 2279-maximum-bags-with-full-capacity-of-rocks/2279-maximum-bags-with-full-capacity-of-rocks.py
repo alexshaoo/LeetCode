@@ -4,8 +4,4 @@ class Solution:
     n = len(rocks)
     i = 0
     # print(rocks)
-    while i < n and additionalRocks >= rocks[i]:
-      # print(additionalRocks, i)
-      additionalRocks -= rocks[i]
-      i += 1
-    return i
+    return bisect_right(list(accumulate(rocks)), additionalRocks)
