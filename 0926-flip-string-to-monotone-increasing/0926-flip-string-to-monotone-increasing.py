@@ -1,20 +1,16 @@
 class Solution:
   def minFlipsMonoIncr(self, s: str) -> int:
     l = len(s)
-    ans = l
+    ans = l-s.count('1')
     z = s.count('0')
     o = 0
-    
     for i,c in enumerate(s):
       if c == '1':
         o += 1
       else:
         z -= 1
-      print(ans, o, z)
       ans = min(ans, z+o)
-      
-    return min(min(ans, l-s.count('1')), o)
-    
+    return ans
     # poss = [0]
     # one = False
     # for i, c in enumerate(s):
