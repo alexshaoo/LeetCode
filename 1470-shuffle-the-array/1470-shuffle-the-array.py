@@ -1,3 +1,3 @@
 class Solution:
   def shuffle(self, nums: List[int], n: int) -> List[int]:
-    return [item for sublist in zip(nums[:n], nums[n:]) for item in sublist]
+    return [x for y in zip(nums[:n], nums[n:]) for x in y]
