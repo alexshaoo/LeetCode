@@ -1,17 +1,15 @@
 class SmallestInfiniteSet:
 
     def __init__(self):
-        self.s = list(range(1, 1002))
+        self.s = set(range(1, 1001))
 
     def popSmallest(self) -> int:
-        n = self.s[0]
-        self.s = self.s[1:]
+        n = min(self.s)
+        self.s.remove(n)
         return n
 
     def addBack(self, num: int) -> None:
-        if not num in self.s:
-          self.s.append(num)
-          self.s.sort();
+        self.s.add(num)
 
 
 # Your SmallestInfiniteSet object will be instantiated and called as such:
