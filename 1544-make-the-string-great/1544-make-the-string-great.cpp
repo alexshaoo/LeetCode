@@ -1,15 +1,22 @@
 class Solution {
 public:
-  string makeGood(string s) {
-    string ans;
-    for (int i = 0 ; i < s.size() ; i++) {
-      char curr = s[i];
-      ans.push_back(curr);
-      while (ans.size() && (ans.back()==s[i+1]+32 || ans.back()==s[i+1]-32)) {
-        ans.pop_back();
-        i++;
-      }
+    string makeGood(string s) {
+        s += '@';
+        while (1) {
+            int n = s.length();
+            string ans = "";
+            for (int i = 0; i < n - 1; ++i) {
+                if (s[i] - 'a' == s[i + 1] - 'A' || s[i] - 'A' == s[i + 1] - 'a') {
+                    ++i;
+                } else {
+                    ans += s[i];
+                }
+            }
+            ans += s[n - 1];
+            if (ans == s) {
+                return ans.substr(0, n-1);
+            }
+            s = ans;
+        }
     }
-    return ans;
-  }
 };
