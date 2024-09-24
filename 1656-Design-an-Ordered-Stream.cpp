@@ -1,10 +1,11 @@
 class OrderedStream {
 private:
     vector<string> packets;
-    int ptr = 0;
+    int ptr;
 public:
     OrderedStream(int n) {
         packets.resize(n);
+        ptr = 0;
     }
     vector<string> insert(int idKey, string value) {
         packets[idKey-1] = value;
