@@ -2,25 +2,23 @@ class Solution {
 public:
     vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
         int n = graph.size();
-        vector<int> outdeg(n);
-        unordered_set<int> safe;
-        unordered_map<int, vector<int>> back;
-        vector<int> ans;
+        vector<int> outdeg(n), ans;
+        queue<int> safe;
+        vector<vector<int>> back(n);
         for (int u = 0; u < n; ++u) {
-            auto adj = graph[u];
-            outdeg[u] = adj.size();
-            if (outdeg[u] == 0) safe.insert(u);
-            for (int v : adj) {
+            outdeg[u] = graph[u].size();
+            if (outdeg[u] == 0) safe.push(u);
+            for (int v : graph[u]) {
                 back[v].push_back(u);
             }
         }
         while (!safe.empty()) {
-            int top = *(safe.begin());
-            safe.erase(safe.begin());
+            int top = safe.front();
+            safe.pop();
             ans.push_back(top);
             for (int u : back[top]) {
                 outdeg[u]--;
-                if (outdeg[u] == 0) safe.insert(u);
+                if (outdeg[u] == 0) safe.push(u);
             }
         }
         sort(ans.begin(), ans.end());
