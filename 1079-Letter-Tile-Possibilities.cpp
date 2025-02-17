@@ -5,8 +5,8 @@ public:
         sort(tiles.begin(), tiles.end());
         unordered_set<string> s;
         do {
-            for (int i = 0; i <= n; ++i) s.insert(tiles.substr(0, i));
+            for (int i = 1; i <= n; ++i) s.insert(tiles.substr(0, i));
         } while (next_permutation(tiles.begin(), tiles.end()));
-        return s.size()-1;
+        return s.size();
     }
 };
