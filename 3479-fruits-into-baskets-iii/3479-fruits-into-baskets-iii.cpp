@@ -23,7 +23,6 @@ public:
             }
         };
         function<int(int, int, int, int, int)> query = [&](int v, int tl, int tr, int l, int r) -> int {
-            // cout << v << ' ' << tl << ' ' << tr << ' ' << l << ' ' << r << '\n';
             if (l > r) return INT_MAX;
             if (l == tl && r == tr) return segtree[v];
             int tm = (tl + tr) / 2;
@@ -40,32 +39,16 @@ public:
         };
         build(0, 0, n-1);
         sort(baskets.begin(), baskets.end());
-        // for (int a : segtree) {
-        //     cout << a << ' ';
-        // }
-        // cout << '\n' << '\n';
         int ans = n;
         for (int fq : fruits) {
             auto it = lower_bound(baskets.begin(), baskets.end(), fq);
-            // for (int a : baskets) {
-            //     cout << a << ' ';
-            // }
-            // cout << '\n';
             if (it != baskets.end()) {
-                // cout << it-baskets.begin() << '\n';
                 int smallest = query(0, 0, n-1, it-baskets.begin(), n-1);
                 if (smallest != INT_MAX) {
                     --ans;
-                    // cout << smallest << ' ' << unsortedIndexToSortedIndex[smallest] << '\n';
                     update(0, 0, n-1, unsortedIndexToSortedIndex[smallest], INT_MAX);
-                    // cout << '\n';
-                    // for (int a : segtree) {
-                    //     cout << a << ' ';
-                    // }
-                    // cout << '\n';
                 }
             }
-            // cout << '\n';
         }
         return ans;
     }
