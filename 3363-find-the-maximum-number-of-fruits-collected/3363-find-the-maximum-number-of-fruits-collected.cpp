@@ -19,7 +19,7 @@ public:
                     if (c < n-1-r) {
                         fruits[r][c] = 0;
                     } else { 
-                        if (c != 0) fruits[r][c] += max(fruits[r-1][c-1], max(fruits[r][c-1], (r==n-1 ? 0 : fruits[r+1][c-1])));
+                        if (c != 0) fruits[r][c] += max({fruits[r-1][c-1], fruits[r][c-1], r==n-1 ? 0 : fruits[r+1][c-1]});
                     }
                 }
             }
