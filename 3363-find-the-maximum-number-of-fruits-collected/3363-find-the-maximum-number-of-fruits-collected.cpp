@@ -14,37 +14,28 @@ public:
         fruits[n-1][n-1] = diag;
         // n-1, 0
         vector<vector<int>> dirs = {{1, -1}, {0, -1}, {-1, -1}};
-        for (int c = 0; c < n-1; ++c) {
-            for (int r = c+1; r < n; ++r) {
-                if (c < n-1-r) {
-                    fruits[r][c] = 0;
-                } else {
-                    int mx = 0;
-                    for (auto dir : dirs) {
-                        if (bounds(r+dir[0], c+dir[1])) mx = max(mx, fruits[r+dir[0]][c+dir[1]]);
+        auto dp = [&]() {
+            for (int c = 0; c < n-1; ++c) {
+                for (int r = c+1; r < n; ++r) {
+                    if (c < n-1-r) {
+                        fruits[r][c] = 0;
+                    } else {
+                        int mx = 0;
+                        for (auto dir : dirs) {
+                            if (bounds(r+dir[0], c+dir[1])) mx = max(mx, fruits[r+dir[0]][c+dir[1]]);
+                        }
+                        fruits[r][c] += mx;
                     }
-                    fruits[r][c] += mx;
                 }
             }
-        }
+        };
+        dp();
         for (int c = 0; c < n-1; ++c) {
             for (int r = 1+c; r < n; ++r) {
                 swap(fruits[r][c], fruits[c][r]);
             }
         }
-        for (int c = 0; c < n-1; ++c) {
-            for (int r = c+1; r < n; ++r) {
-                if (c < n-1-r) {
-                    fruits[r][c] = 0;
-                } else {
-                    int mx = 0;
-                    for (auto dir : dirs) {
-                        if (bounds(r+dir[0], c+dir[1])) mx = max(mx, fruits[r+dir[0]][c+dir[1]]);
-                    }
-                    fruits[r][c] += mx;
-                }
-            }
-        }
+        dp();
         return diag + fruits[n-2][n-1] + fruits[n-1][n-2];
     }
 };
