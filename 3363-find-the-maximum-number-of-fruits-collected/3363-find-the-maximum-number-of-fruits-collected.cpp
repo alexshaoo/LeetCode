@@ -13,24 +13,25 @@ public:
         }
         fruits[n-1][n-1] = diag;
         // n-1, 0
-        auto dp = [&]() {
-            for (int c = 0; c < n-1; ++c) {
-                for (int r = c+1; r < n; ++r) {
-                    if (c < n-1-r) {
-                        fruits[r][c] = 0;
-                    } else { 
-                        if (c != 0) fruits[r][c] += max({fruits[r-1][c-1], fruits[r][c-1], r==n-1 ? 0 : fruits[r+1][c-1]});
-                    }
+        for (int c = 0; c < n-1; ++c) {
+            for (int r = c+1; r < n; ++r) {
+                if (c < n-1-r) {
+                    fruits[r][c] = 0;
+                } else { 
+                    if (c != 0) fruits[r][c] += max({fruits[r-1][c-1], fruits[r][c-1], r==n-1 ? 0 : fruits[r+1][c-1]});
                 }
             }
-        };
-        dp();
-        for (int c = 0; c < n-1; ++c) {
-            for (int r = 1+c; r < n; ++r) {
-                swap(fruits[r][c], fruits[c][r]);
+        }
+        // 0, n-1
+        for (int r = 0; r < n-1; ++r) {
+            for (int c = r+1; c < n; ++c) {
+                if (r < n-1-c) {
+                    fruits[r][c] = 0;
+                } else { 
+                    if (r != 0) fruits[r][c] += max({fruits[r-1][c-1], fruits[r-1][c], c==n-1 ? 0 : fruits[r-1][c+1]});
+                }
             }
         }
-        dp();
         return diag + fruits[n-2][n-1] + fruits[n-1][n-2];
     }
 };
