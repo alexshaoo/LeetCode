@@ -7,31 +7,44 @@ public:
             return (r >= 0 && r < n && c >=0 && c < n);
         };
         // 0, 0
-        for (int i = 0; i < n; ++i) diag += fruits[i][i];
-        // 0, n-1
-        vector<vector<int>> dp1(n, vector<int>(n, 0));
-        vector<vector<int>> dirs1 = {{-1, -1}, {-1, 0}, {-1, 1}};
-        for (int r = 0; r < n-1; ++r) {
-            for (int c = n-1-r; c < n; ++c) {
-                int mx = 0;
-                for (auto dir : dirs1) {
-                    if (bounds(r+dir[0], c+dir[1])) mx = max(mx, dp1[r+dir[0]][c+dir[1]]);
-                }
-                dp1[r][c] = fruits[r][c] + mx;
-            }
+        for (int i = 0; i < n; ++i) {
+            diag += fruits[i][i];
+            fruits[i][i] = 0;
         }
+        fruits[n-1][n-1] = diag;
         // n-1, 0
-        vector<vector<int>> dp2(n, vector<int>(n, 0));
-        vector<vector<int>> dirs2 = {{1, -1}, {0, -1}, {-1, -1}};
+        vector<vector<int>> dirs = {{1, -1}, {0, -1}, {-1, -1}};
         for (int c = 0; c < n-1; ++c) {
-            for (int r = n-1-c; r < n; ++r) {
-                int mx = 0;
-                for (auto dir : dirs2) {
-                    if (bounds(r+dir[0], c+dir[1])) mx = max(mx, dp2[r+dir[0]][c+dir[1]]);
+            for (int r = c+1; r < n; ++r) {
+                if (c < n-1-r) {
+                    fruits[r][c] = 0;
+                } else {
+                    int mx = 0;
+                    for (auto dir : dirs) {
+                        if (bounds(r+dir[0], c+dir[1])) mx = max(mx, fruits[r+dir[0]][c+dir[1]]);
+                    }
+                    fruits[r][c] += mx;
                 }
-                dp2[r][c] = fruits[r][c] + mx;
             }
         }
-        return diag + dp1[n-2][n-1] + dp2[n-1][n-2];
+        for (int c = 0; c < n-1; ++c) {
+            for (int r = 1+c; r < n; ++r) {
+                swap(fruits[r][c], fruits[c][r]);
+            }
+        }
+        for (int c = 0; c < n-1; ++c) {
+            for (int r = c+1; r < n; ++r) {
+                if (c < n-1-r) {
+                    fruits[r][c] = 0;
+                } else {
+                    int mx = 0;
+                    for (auto dir : dirs) {
+                        if (bounds(r+dir[0], c+dir[1])) mx = max(mx, fruits[r+dir[0]][c+dir[1]]);
+                    }
+                    fruits[r][c] += mx;
+                }
+            }
+        }
+        return diag + fruits[n-2][n-1] + fruits[n-1][n-2];
     }
 };
