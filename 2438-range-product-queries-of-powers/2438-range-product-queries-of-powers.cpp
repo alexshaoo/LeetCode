@@ -27,9 +27,13 @@ public:
         }
         vector<int> ans;
         for (int i = 0; i < queries.size(); ++i) {
-            ll inv = modpow(mulP[queries[i][0]], MOD-2);
+            ll start = mulP[queries[i][0]];
             ll end = mulP[queries[i][1]+1];
-            ans.push_back((end*inv) % MOD);
+            if (start == 1) ans.push_back(end);
+            else {
+                ll inv = modpow(start, MOD-2);
+                ans.push_back((end*inv) % MOD);
+            }
         }
         return ans;
     }
