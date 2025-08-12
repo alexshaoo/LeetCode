@@ -19,17 +19,17 @@ public:
         // dp[remainingSum][num] = the number of ways to make remainingSum given that num is the biggest integer in our set
         // dp[10][3] = dp[1][2] + dp[1][1] = 0 + 1
         // ans is dp[n][1:n]
-        int mx = 1;
-        while (pow(mx+1, x) <= n) ++mx;
-        vector<vector<long long>> dp(n+1, vector<long long>(mx+1, 0));
-        for (int i = 0; i <= mx; ++i) {
-            dp[0][i] = 1;
+        int p = 1;
+        vector<int> pows;
+        while (pow(p, x) <= n) {
+            pows.push_back(pow(p, x));
+            ++p;
         }
-        for (int i = 0; i <= n; ++i) {
-            dp[i][0] = 0;
-        }
+        vector<vector<long long>> dp(n+1, vector<long long>(p, 0));
         for (int remainingSum = 1; remainingSum <= n; ++remainingSum) {
-            for (int maxNum = mx; maxNum > 0; --maxNum) {
+            int mi = 1;
+            while (mi < pows.size() && pows[mi] <= remainingSum) ++mi;
+            for (int maxNum = pows[mi-1]; maxNum > 0; --maxNum) {
                 long long newReaminingSum = remainingSum - pow(maxNum, x);
                 if (newReaminingSum <= 0) {
                     if (newReaminingSum == 0) dp[remainingSum][maxNum] = 1;
@@ -47,7 +47,7 @@ public:
         //     cout << '\n';
         // }
         long long ans = 0;
-        for (int i = 1; i <= mx; ++i) {
+        for (int i = 1; i < p; ++i) {
             ans = (ans + dp[n][i]) % MOD;
         }
         return (int)ans;
