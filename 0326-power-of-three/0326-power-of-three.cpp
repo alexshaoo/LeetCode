@@ -2,8 +2,8 @@ class Solution {
 public:
     bool isPowerOfThree(int n) {
         if (n <= 0) return false;
-        if (n == 1) return true;
-        if (n % 3 != 0) return false;
-        return isPowerOfThree(n / 3);
+        // 3^k <= 2e31-1 => k <= log_3(2e31-1) => log(2e31-1)/log(3)
+        int k = log(pow(2, 31)-1) / log(3);
+        return (int)pow(3, k) % n == 0;
     }
 };
