@@ -1,6 +1,6 @@
 class Solution {
 public:
-    string largestGoodInteger(string num) {
+    string largestGoodInteger(const string& num) {
         short ans = -1, i = 0;
         while (i <= num.length()-3) {
             if (ans != -1 && num[i] <= num[ans]) {
