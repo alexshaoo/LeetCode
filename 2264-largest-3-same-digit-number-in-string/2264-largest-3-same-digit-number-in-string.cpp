@@ -1,23 +1,22 @@
 class Solution {
 public:
     string largestGoodInteger(string num) {
-        string ans = "";
-        int n = num.length();
+        int ans = -1;
         int i = 0;
-        while (i <= n-3) {
-            if (ans != "" && num[i] <= ans[0]) {
+        while (i <= num.length()-3) {
+            if (ans != -1 && num[i] <= num[ans]) {
                 ++i;
                 continue;
             }
             if (num[i] == num[i+1] && num[i] == num[i+2]) {
-                if (ans == "" || num[i] > ans[0]) {
-                    ans = string(3, num[i]);
+                if (ans == -1 || num[i] > num[ans]) {
+                    ans = i;
                     i += 3;
                     continue;
                 }
             }
             ++i;
         }
-        return ans;
+        return ans == -1 ? "" : num.substr(ans, 3);
     }
 };
