@@ -3,10 +3,16 @@ public:
     string largestGoodInteger(string num) {
         string ans = "";
         int n = num.length();
-        for (int i = 0; i <= n-3; ++i) {
+        int i = 0;
+        while (i <= n-3) {
             if (num[i] == num[i+1] && num[i] == num[i+2]) {
-                if (ans == "" || num[i] > ans[0]) ans = string(3, num[i]);
+                if (ans == "" || num[i] > ans[0]) {
+                    ans = string(3, num[i]);
+                    i += 3;
+                    continue;
+                }
             }
+            ++i;
         }
         return ans;
     }
