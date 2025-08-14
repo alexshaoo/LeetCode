@@ -1,8 +1,7 @@
 class Solution {
 public:
     string largestGoodInteger(string num) {
-        int ans = -1;
-        int i = 0;
+        short ans = -1, i = 0;
         while (i <= num.length()-3) {
             if (ans != -1 && num[i] <= num[ans]) {
                 ++i;
