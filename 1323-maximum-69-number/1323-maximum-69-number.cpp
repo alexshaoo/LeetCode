@@ -10,3 +10,10 @@ public:
         return num + 3 * pow(10, p);
     }
 };
+
+const auto init = []() noexcept {
+    ios::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+    return 'c';
+};
