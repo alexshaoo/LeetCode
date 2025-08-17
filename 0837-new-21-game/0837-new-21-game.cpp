@@ -1,21 +1,16 @@
 class Solution {
 public:
     double new21Game(int n, int k, int maxPts) {
-        // n = 21, k = 17, maxPts = 10
-        // cur = 16 -> [17, 26]
+        if (k + maxPts <= n || k == 0) return 1.0;
         vector<double> dp(n+1, 0);
         dp[0] = 1;
-        double sm = 0;
+        double sm = 1, ans = 0;
         for (int i = 1; i <= n; ++i) {
-            int l = max(0, i-maxPts);
-            int r = min(i-1, k-1);
-            if (i <= k) sm += dp[i-1] / maxPts;
-            if (i-maxPts-1 >= 0 && i-maxPts-1 < k) sm -= dp[i-maxPts-1] / maxPts;
-            dp[i] = sm;
+            dp[i] = sm / maxPts;
+            if (i < k) sm += dp[i];
+            else ans += dp[i];
+            if (i >= maxPts) sm -= dp[i-maxPts];
         }
-        double ans = 0;
-        for (int i = k; i <= n; ++i) ans += dp[i];
-        // for (double a : dp) cout << a << ' ';
         return ans;
     }
 };
