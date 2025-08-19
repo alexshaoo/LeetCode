@@ -8,10 +8,9 @@ public:
         while (l < n) {
             r = l;
             while (r < n && nums[r] == 0) ++r;
-            --r;
-            long long len = r-l+1;
+            long long len = r-l;
             ans += ((len) * (len+1)) / 2;
-            l = r+1;
+            l = r;
             while (l < n && nums[l] != 0) ++l;
         }
         return ans;
