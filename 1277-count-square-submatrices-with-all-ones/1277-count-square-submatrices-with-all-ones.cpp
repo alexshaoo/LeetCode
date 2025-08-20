@@ -12,18 +12,11 @@ public:
         // sum(k^2) = n(n+1)(2n+1)/6
         int n = matrix.size(), m = matrix[0].size();
         vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
-        for (int i = 1; i <= n; ++i) {
-            for (int j = 1; j <= m; ++j) {
-                if (matrix[i-1][j-1] == 0) {
-                    dp[i][j] = 0;
-                } else {
-                    dp[i][j] = 1 + min(dp[i-1][j], min(dp[i-1][j-1], dp[i][j-1]));
-                }
-            }
-        }
         int ans = 0;
         for (int i = 1; i <= n; ++i) {
             for (int j = 1; j <= m; ++j) {
+                if (matrix[i-1][j-1] == 0) continue;
+                dp[i][j] = 1 + min(dp[i-1][j], min(dp[i-1][j-1], dp[i][j-1]));
                 ans += dp[i][j];
             }
         }
