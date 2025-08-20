@@ -11,23 +11,20 @@ public:
         // = n^3 + 3n^2 + 2n - (3/2)(n^2 + n) = (2n^3 + 6n^2 + 4n - 3n^2 - 3n) / 2 = (2n^3 + 3n^2 + n) / 2
         // sum(k^2) = n(n+1)(2n+1)/6
         int n = matrix.size(), m = matrix[0].size();
-        vector<vector<int>> ps(n+1, vector<int>(m+1, 0));
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < m; ++j) {
-                ps[i+1][j+1] = ps[i][j+1] + ps[i+1][j] - ps[i][j] + (matrix[i][j] == 1);
+        vector<vector<int>> dp(n+1, vector<int>(m+1, 0));
+        for (int i = 1; i <= n; ++i) {
+            for (int j = 1; j <= m; ++j) {
+                if (matrix[i-1][j-1] == 0) {
+                    dp[i][j] = 0;
+                } else {
+                    dp[i][j] = 1 + min(dp[i-1][j], min(dp[i-1][j-1], dp[i][j-1]));
+                }
             }
         }
         int ans = 0;
-        for (int sz = 1; sz <= min(n, m); ++sz) {
-            for (int i = 0; i < n-sz+1; ++i) {
-                for (int j = 0; j < m-sz+1; ++j) {
-                    int sm = ps[i+sz][j+sz] - ps[i][j+sz] - ps[i+sz][j] + ps[i][j];
-                    if (sm == sz * sz) {
-                        // cout << "updated" << ' ';
-                        ++ans;
-                    }
-                    // cout << sz << ' ' << i << ' ' << j << '\n';
-                }
+        for (int i = 1; i <= n; ++i) {
+            for (int j = 1; j <= m; ++j) {
+                ans += dp[i][j];
             }
         }
         return ans;
