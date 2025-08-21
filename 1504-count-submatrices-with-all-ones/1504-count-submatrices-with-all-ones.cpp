@@ -3,25 +3,20 @@ public:
     int numSubmat(vector<vector<int>>& mat) {
         int n = mat.size();
         int m = mat[0].size();
-        vector<vector<int>> rowAccum(n, vector<int>(m, 0));
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < m; ++j) {
-                if (j == 0) rowAccum[i][j] = (mat[i][j] == 1);
-                else rowAccum[i][j] = (mat[i][j] == 0 ? 0 : rowAccum[i][j-1] + 1);
-            }
-        }
+        vector<int> heights(m, 0), cnt(m, 0);
         int ans = 0;
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < m; ++j) {
-                int minWidth = rowAccum[i][j];
-                int row = i;
-                int cnt = 0;
-                while (row >= 0 && minWidth > 0) {
-                    minWidth = min(minWidth, rowAccum[row][j]);
-                    --row;
-                    cnt += minWidth;
+        for (int r = 0; r < n; ++r) {
+            stack<int> st;
+            for (int c = 0; c < m; ++c) {
+                heights[c] = (mat[r][c] == 0 ? 0 : heights[c] + 1);
+                while (st.size() > 0 && heights[st.top()] >= heights[c]) st.pop();
+                if (st.size() == 0) {
+                    cnt[c] = heights[c] * (c+1);
+                } else {
+                    cnt[c] = heights[c] * (c-st.top()) + cnt[st.top()];
                 }
-                ans += cnt;
+                ans += cnt[c];
+                st.push(c);
             }
         }
         return ans;
