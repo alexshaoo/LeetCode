@@ -12,7 +12,7 @@ public:
             if (degs[i] % 2 == 1) oddDegs.push_back(i);
         }
         if (oddDegs.size() > 4) return false;
-        unordered_map<int, unordered_set<int>> adj;
+        vector<unordered_set<int>> adj(n+1);
         for (auto edge : edges) {
             int u = edge[0], v = edge[1];
             auto it = find(oddDegs.begin(), oddDegs.end(), u);
@@ -28,14 +28,14 @@ public:
         if (oddDegs.size() == 2) {
             int u = oddDegs[0], v = oddDegs[1];
             for (int i = 1; i <= n; ++i) {
-                if ((adj[u].find(i) == adj[u].end()) && (adj[v].find(i) == adj[v].end())) return true;
+                if ((adj[u].count(i) == 0) && (adj[v].count(i) == 0)) return true;
             }
             return false;
         }
         if (oddDegs.size() == 4) {
             sort(oddDegs.begin(), oddDegs.end());
             do {
-                if ((adj[oddDegs[0]].find(oddDegs[1]) == adj[oddDegs[0]].end()) && (adj[oddDegs[2]].find(oddDegs[3]) == adj[oddDegs[2]].end())) return true;
+                if ((adj[oddDegs[0]].count(oddDegs[1]) == 0) && (adj[oddDegs[2]].count(oddDegs[3]) == 0)) return true;
             } while (next_permutation(oddDegs.begin(), oddDegs.end()));
             return false;
         }
