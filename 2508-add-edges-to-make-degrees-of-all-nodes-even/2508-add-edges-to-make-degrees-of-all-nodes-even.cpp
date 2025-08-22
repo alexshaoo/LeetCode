@@ -27,11 +27,8 @@ public:
         if (oddDegs.size() == 0) return true;
         if (oddDegs.size() == 2) {
             int u = oddDegs[0], v = oddDegs[1];
-            // either connect the two
-            if (adj[u].find(v) == adj[u].end()) return true;
-            // or connect both to some other node
             for (int i = 1; i <= n; ++i) {
-                if (i != u && i != v && (adj[u].find(i) == adj[u].end()) && (adj[v].find(i) == adj[v].end())) return true;
+                if ((adj[u].find(i) == adj[u].end()) && (adj[v].find(i) == adj[v].end())) return true;
             }
             return false;
         }
