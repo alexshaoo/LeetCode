@@ -1,34 +1,25 @@
 class Solution {
-struct Pass {
-    double num;
-    double denom;
-    bool operator<(const Pass& other) const {
-        double inc = (num+1)/(denom+1) - num/denom;
-        double otherInc = (other.num+1)/(other.denom+1) - other.num/other.denom;
-        return inc < otherInc;
-    }
-};
-
 public:
     double maxAverageRatio(vector<vector<int>>& classes, int extraStudents) {
-        priority_queue<Pass> pq;
-        for (auto c : classes) {
-            int pass = c[0], total = c[1];
-            pq.push(Pass(pass, total));
+        priority_queue<tuple<double, int, int>> pq;
+        auto gain = [&](int pass, int total) {
+            return (double)(pass + 1) / (total + 1) - (double)pass/total;
+        };
+        double tot = 0;
+        for (vector<int> c : classes) {
+            int pass = c[0];
+            int total = c[1];
+            tot += (double)pass/total;
+            pq.push(make_tuple(gain(pass, total), pass, total));
         }
         while (extraStudents--) {
-            auto c = pq.top();
+            auto t = pq.top();
             pq.pop();
-            c.num++;
-            c.denom++;
-            pq.push(c);
+            tot += get<0>(t);
+            int pass = get<1>(t)+1;
+            int total = get<2>(t)+1;
+            pq.push(make_tuple(gain(pass, total), pass, total));
         }
-        double ans = 0;
-        while (!pq.empty()) {
-            auto c = pq.top();
-            pq.pop();
-            ans += (double)c.num / c.denom;
-        }
-        return ans / classes.size();
+        return tot / classes.size();
     }
 };
