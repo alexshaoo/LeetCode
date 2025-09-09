@@ -2,16 +2,22 @@ class Solution {
 public:
   static constexpr int MOD = 1e9+7;
   int peopleAwareOfSecret(int n, int delay, int forget) {
-    vector<long long> dp(n+1, 0);
+    vector<long long> dp(n+1, 0); // dp[i] is the number of people who found out on day
     dp[1] = 1LL;
-    for (int i = 1; i <= n; ++i) {
-      for (int j = i+delay; j < min(n+1, i+forget); ++j) {
-        dp[j] = (dp[j] + dp[i]) % MOD;
+    long long share = 0;
+    for (int d = 2; d <= n; ++d) {
+      if (d-delay > 0) {
+        share += dp[d-delay];
       }
+      if (d-forget > 0) {
+        share -= dp[d-forget];
+      }
+      share = (share + MOD) % MOD;
+      dp[d] = share;
     }
     long long cnt = 0;
-    for (int day = n; day > max(-1, n-forget); --day) {
-      cnt = (cnt + dp[day]) % MOD;
+    for (int d = n-forget+1; d <= n; ++d) {
+      cnt = (cnt + dp[d]) % MOD;
     }
     return (int)cnt;
   }
