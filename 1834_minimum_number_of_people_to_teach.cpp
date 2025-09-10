@@ -1,39 +1,32 @@
 class Solution {
 public:
-  bool f(unordered_set<int> s1, unordered_set<int> s2) {
-    if (s1.size() > s2.size()) swap(s1, s2);
-    for (const auto& x : s1) {
-      if (s2.contains(x)) return true;
-    }
-    return false;
-  }
   int minimumTeachings(int n, vector<vector<int>>& languages, vector<vector<int>>& friendships) {
     int m = languages.size();
-    vector<unordered_set<int>> ul(m+1);
+    vector<vector<bool>> adj(m+1, vector<bool>(n+1, false));
     for (int i = 0; i < m; ++i) {
-      ul[i+1] = unordered_set(languages[i].begin(), languages[i].end());
+      for (const auto& l : languages[i])
+        adj[i+1][l] = true;
     }
-    vector<vector<int>> cant; // friends that can't communicate
-    for (auto fs : friendships) {
-      int u = fs[0], v = fs[1];
-      if (!f(ul[u], ul[v])) {
-        cant.push_back({u, v});
+    vector<bool> learn(m+1, false);
+    for (const auto& f : friendships) {
+      int u = f[0], v = f[1];
+      bool know = false;
+      for (int i = 1; i <= n; ++i) {
+        if (adj[u][i] && adj[v][i]) {
+          know = true;
+          break;
+        }
+      }
+      if (!know) {
+        learn[u] = true;
+        learn[v] = true;
       }
     }
     int ans = 505;
     for (int l = 1; l <= n; ++l) {
       int cnt = 0;
-      for (auto fs : cant) {
-        int u = fs[0], v = fs[1];
-        if (ul[u].contains(l) && ul[v].contains(l)) continue;
-        if (!ul[u].contains(l)) {
-          ++cnt;
-          ul[u].insert(l);
-        }
-        if (!ul[v].contains(l)) {
-          ++cnt;
-          ul[v].insert(l);
-        }
+      for (int u = 1; u <= m; ++u) {
+        if (learn[u] && !adj[u][l]) ++cnt;
       }
       ans = min(ans, cnt);
     }
