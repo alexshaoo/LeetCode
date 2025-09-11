@@ -1,20 +1,19 @@
 class Solution {
 public:
-  bool isVowel(char c) {
-    return (c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u' || c == 'A' || c == 'E' || c == 'I' || c == 'O' || c == 'U');
-  }
   string sortVowels(string s) {
-    int n = s.length();
-    vector<char> v;
-    for (char c : s) {
-      if (isVowel(c)) v.push_back(c);
+    vector<int> freq(128, 0);
+    vector<bool> isVowel(128, false);
+    string vowels = "AEIOUaeiou";
+    for (char c : vowels) isVowel[c] = true;
+    for (const char& c : s) {
+      if (isVowel[c]) freq[c]++;
     }
-    sort(v.begin(), v.end());
     int i = 0;
     for (char& c : s) {
-      if (isVowel(c)) {
-        c = v[i];
-        ++i;
+      if (isVowel[c]) {
+        while (i < vowels.size() && freq[vowels[i]] == 0) ++i;
+        c = vowels[i];
+        --freq[vowels[i]];
       }
     }
     return s;
