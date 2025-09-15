@@ -3,19 +3,16 @@ public:
   int canBeTypedWords(string text, string brokenLetters) {
     bool broken[26];
     for (const auto& ch : brokenLetters) broken[ch-'a'] = true;
-    int cnt = 0;
-    istringstream iss(text);
-    string word;
-    while (iss >> word) {
-      bool b = false;
-      for (const auto& ch : word) {
-        if (broken[ch-'a']) {
-          b = true;
-          break;
-        }
+    int words = 0; // words you can type
+    bool b = 0; 
+    for (const auto& ch : text) {
+      if (ch == ' ') {
+        words += (b == 0);
+        b = false;
+      } else {
+        b |= broken[ch-'a'];
       }
-      if (!b) ++cnt;
     }
-    return cnt;
+    return words + (b == 0);
   }
 };
