@@ -1,19 +1,16 @@
 class Solution {
 public:
   vector<int> replaceNonCoprimes(vector<int>& nums) {
-    list<int> ans(nums.begin(), nums.end());
-    for (auto it = ans.begin(); it != ans.end(); ++it) {
-      if (it != ans.begin()) {
-        int l = *prev(it);
-        int r = *it;
-        int g = gcd(l, r);
-        if (g > 1) {
-          ans.erase(prev(it));
-          *it = (long long)l*r / g;
-          --it;
-        }
+    vector<int> ans;
+    for (int num : nums) {
+      while (true) {
+        int g = (ans.empty() ? 1 : gcd(num, ans.back()));
+        if (g <= 1) break;
+        num *= ans.back() / g;
+        ans.pop_back();
       }
+      ans.push_back(num);
     }
-    return vector<int>(ans.begin(), ans.end());
+    return ans;
   }
 };
