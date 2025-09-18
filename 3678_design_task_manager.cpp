@@ -4,7 +4,7 @@ public:
     struct Cmp {
         bool operator()(const vector<int>& a, const vector<int>& b) const {
             if (a[2] != b[2]) return a[2] > b[2];
-            return a[0] > b[0];
+            return a[1] > b[1];
         }
     };
     set<vector<int>, Cmp> s;
@@ -36,6 +36,7 @@ public:
     }
     
     int execTop() {
+        if (s.empty()) return -1;
         auto task = *s.begin();
         rmv(task[1]);
         return task[0];
