@@ -1,6 +1,12 @@
 class Router {
-  queue<vector<int>> q; // {source, destination, timestamp}
-  set<vector<int>> s; // {source, destination, timestamp}
+  struct Hash {
+    size_t operator()(const tuple<int,int,int>& x) const {
+        auto [a, b, c] = x;
+        return ((size_t)a * 1315423911u) ^ ((size_t)b << 21) ^ ((size_t)c);
+    }
+  };
+  queue<array<int, 3>> q; // {source, destination, timestamp}
+  unordered_set<array<int, 3>, Hash> s; // {source, destination, timestamp}
   unordered_map<int, deque<int>> mp; // destination -> timestamp
   int memoryLimit;
 public:
@@ -9,21 +15,21 @@ public:
   }
   
   bool addPacket(int source, int destination, int timestamp) {
-    vector<int> v = {source, destination, timestamp};
-    if (s.find(v) != s.end()) return false;
+    array<int, 3> a = {source, destination, timestamp};
+    if (s.find(a) != s.end()) return false;
     if (q.size() == memoryLimit) forwardPacket();
-    q.push(v);
-    s.insert(v);
+    q.push(a);
+    s.insert(a);
     mp[destination].push_back(timestamp);
     return true;
   }
   
   vector<int> forwardPacket() {
     if (q.empty()) return {};
-    vector<int> v = q.front(); q.pop();
-    s.erase(v);
-    mp[v[1]].pop_front();
-    return v;
+    array<int, 3> a = q.front(); q.pop();
+    s.erase(a);
+    mp[a[1]].pop_front();
+    return vector(a.begin(), a.end());
   }
   
   int getCount(int destination, int startTime, int endTime) {
