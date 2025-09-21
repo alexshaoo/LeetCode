@@ -19,10 +19,8 @@ public:
   MovieRentingSystem(int n, vector<vector<int>>& entries) {
     for (const auto& e : entries) {
       int s = e[0], m = e[1], p = e[2];
-      array<int, 2> ps = {p, s};
-      array<int, 2> sm = {s, m};
-      unrented[m].insert(ps);
-      toPrice[sm] = p;
+      unrented[m].insert({p, s});
+      toPrice[{s, m}] = p;
     }
   }
   
@@ -36,21 +34,15 @@ public:
   }
   
   void rent(int shop, int movie) {
-    array<int, 2> sm = {shop, movie};
-    int p = toPrice[sm];
-    array<int, 2> ps = {p, shop};
-    unrented[movie].erase(ps);
-    array<int, 3> psm = {p, shop, movie};
-    rented.insert(psm);
+    int p = toPrice[{shop, movie}];
+    unrented[movie].erase({p, shop});
+    rented.insert({p, shop, movie});
   }
   
   void drop(int shop, int movie) {
-    array<int, 2> sm = {shop, movie};
-    int p = toPrice[sm];
-    array<int, 2> ps = {p, shop};
-    unrented[movie].insert(ps);
-    array<int, 3> psm = {p, shop, movie};
-    rented.erase(psm);
+    int p = toPrice[{shop, movie}];
+    unrented[movie].insert({p, shop});
+    rented.erase({p, shop, movie});
   }
   
   vector<vector<int>> report() {
