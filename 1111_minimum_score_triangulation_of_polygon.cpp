@@ -1,17 +1,16 @@
 class Solution {
 public:
-  int dp[50][50];
-  int f(vector<int>& values, int i, int j) {
-    if (dp[i][j] != 0) return dp[i][j];
-    int ans = 0;
-    for (int k = i+1; k < j; ++k) {
-      ans = min(ans == 0 ? INT_MAX : ans, values[i]*values[j]*values[k] + f(values, i, k) + f(values, k, j));
-    }
-    dp[i][j] = ans;
-    return ans;
-  }
   int minScoreTriangulation(vector<int>& values) {
-    memset(dp, 0, sizeof(dp));
-    return f(values, 0, values.size()-1);
+    int n = values.size();
+    vector<vector<int>> dp(n, vector<int>(n, 0));
+    for (int j = 2; j < n; ++j) {
+      for (int i = j-2; i >= 0; --i) {
+        dp[i][j] = INT_MAX;
+        for (int k = i+1; k < j; ++k) {
+          dp[i][j] = min(dp[i][j], dp[i][k] + values[i]*values[j]*values[k] + dp[k][j]);
+        }
+      }
+    }
+    return dp[0][n-1];
   }
 };
