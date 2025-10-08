@@ -1,20 +1,11 @@
 class Solution {
 public:
-  vector<int> successfulPairs(vector<int>& spellss, vector<int>& potions, long long success) {
-    vector<pair<int, int>> spells(spellss.size());
-    int sl = spells.size(), pl = potions.size();
-    for (int i = 0; i < sl; ++i) spells[i] = {spellss[i], i};
-    sort(spells.begin(), spells.end(), [](const pair<int, int>& a, const pair<int, int>& b) {
-      return a.first > b.first;
-    });
+  vector<int> successfulPairs(vector<int>& spells, vector<int>& potions, long long success) {
     sort(potions.begin(), potions.end());
-    vector<int> ans(sl);
-    int si = 0, pi = 0;
-    while (si < sl && pi < pl) {
-      while (pi < pl && (long long)spells[si].first * potions[pi] < success) ++pi;
-      if (pi == pl) return ans;
-      ans[spells[si].second] = pl-pi;
-      ++si;
+    vector<int> ans;
+    for (int s : spells) {
+      auto it = lower_bound(potions.begin(), potions.end(), (success + s-1)/ s);
+      ans.push_back(potions.end() - it);
     }
     return ans;
   }
