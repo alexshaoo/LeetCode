@@ -7,13 +7,15 @@ public:
       deg[u]++;
       deg[v]++;
     }
-    sort(deg.begin(), deg.end(), [](const long long& a, const long long& b) {
-      return a > b;
-    });
+    vector<long long> freq(n);
+    for (const auto& d : deg) freq[d]++;
     long long ans = 0;
-    for (int i = 0; i < n; ++i) {
-      if (deg[i] == 0) break;
-      ans += (n-i) * deg[i];
+    long long val = 1;
+    for (long long i = 0; i < n; ++i) {
+      for (long long f = freq[i]; f > 0; --f) {
+        ans += val * i;
+        ++val;
+      }
     }
     return ans;
   }
