@@ -2,17 +2,11 @@ class Solution {
 public:
   bool containsPattern(vector<int>& arr, int m, int k) {
     int n = arr.size();
-    for (int i = 0; i <= n-m*k; ++i) {
-      bool matches = true;
-      for (int j = 0; j < m; ++j) {
-        int val = arr[i+j];
-        int idx = j;
-        while (idx < m*k) {
-          if (arr[i+idx] != val) matches = false;
-          idx += m;
-        }
-      }
-      if (matches) return true;
+    int cnt = 0;
+    for (int i = 0; i < n-m; ++i) {
+      if (arr[i] == arr[i+m]) ++cnt;
+      else cnt = 0;
+      if (cnt == m*(k-1)) return true;
     }
     return false;
   }
