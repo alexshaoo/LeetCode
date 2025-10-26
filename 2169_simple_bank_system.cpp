@@ -1,32 +1,33 @@
 class Bank {
   int n;
-  unordered_map<int, long long> mp;
+  vector<long long> accs;
   bool oob(int accNum) {
     return accNum < 1 || accNum > n;
   }
 public:
   Bank(vector<long long>& balance) {
     n = balance.size();
-    for (int i = 0; i < n; ++i) mp[i+1] = balance[i];
+    accs.reserve(n+1);
+    for (int i = 0; i < n; ++i) accs[i+1] = balance[i];
   }
   
   bool transfer(int account1, int account2, long long money) {
-    if (oob(account1) || oob(account2) || money > mp[account1]) return false;
-    mp[account2] += money;
-    mp[account1] -= money;
+    if (oob(account1) || oob(account2) || money > accs[account1]) return false;
+    accs[account2] += money;
+    accs[account1] -= money;
     return true;
   }
   
   bool deposit(int account, long long money) {
     if (oob(account)) return false;
-    mp[account] += money;
+    accs[account] += money;
     return true;
   }
   
   bool withdraw(int account, long long money) {
     if (oob(account)) return false;
-    if (money > mp[account]) return false;
-    mp[account] -= money;
+    if (money > accs[account]) return false;
+    accs[account] -= money;
     return true;
   }
 };
