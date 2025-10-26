@@ -1,33 +1,24 @@
 class Bank {
-  int n;
+  size_t n;
   vector<long long> accs;
-  bool oob(int accNum) {
-    return accNum < 1 || accNum > n;
-  }
+  bool oob(int accNum) { return accNum < 1 || accNum > n; }
 public:
-  Bank(vector<long long>& balance) {
-    n = balance.size();
-    accs.reserve(n+1);
-    for (int i = 0; i < n; ++i) accs[i+1] = balance[i];
-  }
+  Bank(vector<long long>& balance) : n{balance.size()}, accs{balance} {} 
   
   bool transfer(int account1, int account2, long long money) {
-    if (oob(account1) || oob(account2) || money > accs[account1]) return false;
-    accs[account2] += money;
-    accs[account1] -= money;
-    return true;
+    if (oob(account2)) return false;
+    return withdraw(account1, money) && deposit(account2, money);
   }
   
   bool deposit(int account, long long money) {
     if (oob(account)) return false;
-    accs[account] += money;
+    accs[account-1] += money;
     return true;
   }
   
   bool withdraw(int account, long long money) {
-    if (oob(account)) return false;
-    if (money > accs[account]) return false;
-    accs[account] -= money;
+    if (oob(account) || money > accs[account-1]) return false;
+    accs[account-1] -= money;
     return true;
   }
 };
