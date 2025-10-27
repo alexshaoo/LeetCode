@@ -3,9 +3,8 @@ public:
   int numberOfBeams(vector<string>& bank) {
     int ans = 0;
     int prev = 0;
-    for (int i = 0; i < bank.size(); ++i) {
-      int cnt = 0;
-      for (char c : bank[i]) if (c == '1') ++cnt;
+    for (const string& row : bank) {
+      int cnt = count(row.begin(), row.end(), '1');
       if (cnt > 0) {
         ans += cnt * prev;
         prev = cnt;
