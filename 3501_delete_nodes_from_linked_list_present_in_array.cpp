@@ -11,24 +11,16 @@
 class Solution {
 public:
   ListNode* modifiedList(vector<int>& nums, ListNode* head) {
-    unordered_set<int> s;
-    for (const int& num : nums) s.insert(num);
-    ListNode* ans = nullptr;
-    ListNode* prev = nullptr;
-    ListNode* curr = head;
-    while (curr != nullptr) {
-      if (!s.contains(curr->val)) {
-        if (ans == nullptr) {
-          ans = curr;
-        }
-        if (prev != nullptr) {
-          prev->next = curr;
-        }
-        prev = curr;
+    bitset<100001> s;
+    for (const int& num : nums) s[num] = 1;
+    ListNode* dummy = new ListNode(-1, head);
+    for (auto curr = dummy; curr->next != nullptr; ) {
+      if (s[curr->next->val]) {
+        curr->next = curr->next->next;
+      } else {
+        curr = curr->next;
       }
-      curr = curr->next;
     }
-    if (prev->next != nullptr && s.contains(prev->next->val)) prev->next = nullptr;
-    return ans;
+    return dummy->next;
   }
 };
