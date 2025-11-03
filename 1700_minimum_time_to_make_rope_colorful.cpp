@@ -1,15 +1,12 @@
 class Solution {
 public:
   int minCost(string colors, vector<int>& neededTime) {
-    int n = colors.length();
-    int idx = 0;
     int time = 0;
-    while (idx < n-1) {
-      if (colors[idx] == colors[idx+1]) {
-        if (neededTime[idx] > neededTime[idx+1]) swap(neededTime[idx], neededTime[idx+1]);
-        time += neededTime[idx];
+    for (int i = 0; i < colors.size()-1; ++i) {
+      if (colors[i] == colors[i+1]) {
+        if (neededTime[i] > neededTime[i+1]) swap(neededTime[i], neededTime[i+1]);
+        time += neededTime[i];
       }
-      ++idx;
     }
     return time;
   }
