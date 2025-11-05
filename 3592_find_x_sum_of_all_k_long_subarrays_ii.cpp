@@ -7,7 +7,7 @@ public:
     for (int i = 0; i < k; ++i) freq[nums[i]]++;
     set<pair<int, int>, greater<pair<int, int>>> top, bot; // freq, num
     ll sm = 0;
-    for (const auto& [k, v] : freq) bot.insert({v, k});
+    for (const auto& [num, f] : freq) bot.insert({f, num});
     for (int i = 0; !bot.empty() && i < x; ++i) {
       auto it = bot.begin();
       sm += 1LL * it->first * it->second;
@@ -16,7 +16,7 @@ public:
     }
     vector<ll> ans(n-k+1);
     ans[0] = sm;
-    auto rm = [&](int num, int f) {
+    auto eraseKey = [&](int num, int f) {
       pair<int, int> p = {f, num};
       if (top.contains(p)) {
         sm -= 1LL * num * f;
@@ -25,8 +25,8 @@ public:
         bot.erase(p);
       }
     };
-    auto remove = [&](int num, int f) {
-      rm(num, f);
+    auto dec = [&](int num, int f) {
+      eraseKey(num, f);
       if (f > 1) {
         bot.insert({f-1, num});
       }
@@ -38,8 +38,8 @@ public:
       }
       freq[num]--;
     };
-    auto add = [&](int num, int f) {
-      rm(num, f);
+    auto inc = [&](int num, int f) {
+      eraseKey(num, f);
       sm += 1LL * num * (f+1);
       top.insert({f+1, num});
       if (top.size() > x) {
@@ -51,8 +51,8 @@ public:
       freq[num]++;
     };
     for (int i = 0; i < n-k; ++i) {
-      remove(nums[i], freq[nums[i]]);
-      add(nums[i+k], freq[nums[i+k]]);
+      dec(nums[i], freq[nums[i]]);
+      inc(nums[i+k], freq[nums[i+k]]);
       ans[i+1] = sm;
     }
     return ans;
