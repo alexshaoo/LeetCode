@@ -3,12 +3,10 @@ class Solution {
 public:
   vector<long long> findXSum(vector<int>& nums, int k, int x) {
     int n = nums.size();
-    vector<ll> ans(n-k+1);
     unordered_map<int, int> freq;
-    set<pair<int, int>, greater<pair<int, int>>> top; // freq, num
-    set<pair<int, int>, greater<pair<int, int>>> bot; // freq, num
-    ll sm = 0;
     for (int i = 0; i < k; ++i) freq[nums[i]]++;
+    set<pair<int, int>, greater<pair<int, int>>> top, bot; // freq, num
+    ll sm = 0;
     for (const auto& [k, v] : freq) bot.insert({v, k});
     for (int i = 0; !bot.empty() && i < x; ++i) {
       auto it = bot.begin();
@@ -16,10 +14,9 @@ public:
       top.insert(*it);
       bot.erase(it);
     }
+    vector<ll> ans(n-k+1);
     ans[0] = sm;
-    auto remove = [&](int idx) {
-      int num = nums[idx];
-      int f = freq[num];
+    auto rm = [&](int num, int f) {
       pair<int, int> p = {f, num};
       if (top.contains(p)) {
         sm -= 1LL * num * f;
@@ -27,6 +24,9 @@ public:
       } else {
         bot.erase(p);
       }
+    };
+    auto remove = [&](int num, int f) {
+      rm(num, f);
       if (f > 1) {
         bot.insert({f-1, num});
       }
@@ -38,16 +38,8 @@ public:
       }
       freq[num]--;
     };
-    auto add = [&](int idx) {
-      int num = nums[idx];
-      int f = freq[num];
-      pair<int, int> p = {f, num};
-      if (top.contains(p)) {
-        sm -= 1LL * num * f;
-        top.erase(p);
-      } else if (bot.contains(p)) {
-        bot.erase(p);
-      }
+    auto add = [&](int num, int f) {
+      rm(num, f);
       sm += 1LL * num * (f+1);
       top.insert({f+1, num});
       if (top.size() > x) {
@@ -59,8 +51,8 @@ public:
       freq[num]++;
     };
     for (int i = 0; i < n-k; ++i) {
-      remove(i);
-      add(i+k);
+      remove(nums[i], freq[nums[i]]);
+      add(nums[i+k], freq[nums[i+k]]);
       ans[i+1] = sm;
     }
     return ans;
